@@ -1,0 +1,22 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/Users/kjj/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15/cores/esp32"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/Users/kjj/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15/variants/esp32c3"
+  },
+  {
+    "Sourcefile": "/Users/kjj/git/esp32-base/build/sketch/esp32-base.ino.cpp",
+    "Include": "IOPin.h",
+    "Includepath": "/Users/kjj/Documents/Arduino/libraries/IOPin"
+  },
+  {
+    "Sourcefile": "/Users/kjj/git/esp32-base/build/sketch/esp32-base.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]
