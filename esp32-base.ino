@@ -3,10 +3,14 @@
 
 IOPin led(8, OUTPUT);
 
-void setup() {}
+void setup() {
+  Serial.begin(921600);
+  Serial.println("Hello, ESP32!");
+}
 
 void loop() {
-  led.on();
-  delay(500);
   led.off();
+  delay(100);
+  led.on();
+  delay(100);
 }
