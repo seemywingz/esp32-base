@@ -1,8 +1,0 @@
-#line 1 "/Users/kjj/git/esp32-base/.vscode/arduino.json"
-{
-    "sketch": "esp32-base.ino",
-    "output": "build",
-    "configuration": "JTAGAdapter=default,CDCOnBoot=default,PartitionScheme=default,CPUFreq=160,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,DebugLevel=none,EraseFlash=none",
-    "board": "esp32:esp32:esp32c3",
-    "port": "/dev/tty.usbmodem141301"
-}
