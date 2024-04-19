@@ -15,37 +15,30 @@ void setup() {
   initializeWebServer();
 }
 
-void loop() {
-  wifi.handleClient();
-  Serial.println("Blinking LED");
-  led.off();
-  delay(1000);
-  led.on();
-  delay(1000);
-}
+void loop() { wifi.handleClient(); }
 
 void initializeWebServer() {
-  // List all files in the LittleFS
-  //   wifi->webServer.on("/files", HTTP_GET, []() {
-  //     File root = SPIFFS.open("/");
-  //     if (!root) {
-  //       wifi->webServer.send(500, "text/html", "Failed to open directory");
-  //       return;
-  //     }
-  //     if (!root.isDirectory()) {
-  //       wifi->webServer.send(500, "text/html", "No directory found");
-  //       return;
-  //     }
+  // List all files in the SPIFFS
+  wifi.webServer.on("/files", HTTP_GET, []() {
+    File root = SPIFFS.open("/");
+    if (!root) {
+      wifi.webServer.send(500, "text/html", "Failed to open directory");
+      return;
+    }
+    if (!root.isDirectory()) {
+      wifi.webServer.send(500, "text/html", "No directory found");
+      return;
+    }
 
-  //     String message = "Files on SPIFFS:<br>";
-  //     File file = root.openNextFile();
-  //     while (file) {
-  //       String fileName = file.name();
-  //       message += "<a href=\"" + fileName + "\">" + fileName + "</a><br>";
-  //       file = root.openNextFile();
-  //     }
-  //     wifi->webServer.send(200, "text/html", message);
-  //   });
+    String message = "Files on SPIFFS:<br>";
+    File file = root.openNextFile();
+    while (file) {
+      String fileName = file.name();
+      message += "<a href=\"" + fileName + "\">" + fileName + "</a><br>";
+      file = root.openNextFile();
+    }
+    wifi.webServer.send(200, "text/html", message);
+  });
   wifi.enableMDNS(webServerName);
   wifi.start();
 }
