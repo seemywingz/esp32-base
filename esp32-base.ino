@@ -1,7 +1,7 @@
 
 #include <ESPWiFi.h>
 #include <IOPin.h>
-#include <SPIFFS.h>
+#include <LittleFS.h>
 
 IOPin led(8, OUTPUT);
 
@@ -18,26 +18,10 @@ void setup() {
 void loop() { wifi.handleClient(); }
 
 void initializeWebServer() {
-  // List all files in the SPIFFS
-  wifi.webServer.on("/files", HTTP_GET, []() {
-    File root = SPIFFS.open("/");
-    if (!root) {
-      wifi.webServer.send(500, "text/html", "Failed to open directory");
-      return;
-    }
-    if (!root.isDirectory()) {
-      wifi.webServer.send(500, "text/html", "No directory found");
-      return;
-    }
-
-    String message = "Files on SPIFFS:<br>";
-    File file = root.openNextFile();
-    while (file) {
-      String fileName = file.name();
-      message += "<a href=\"" + fileName + "\">" + fileName + "</a><br>";
-      file = root.openNextFile();
-    }
-    wifi.webServer.send(200, "text/html", message);
+  wifi.setConnectSubroutine([]() {
+    Serial.println("Connecting to WiFi");
+    Serial.println(wifi.ssid + " " + wifi.password);
+    delay(500);
   });
   wifi.enableMDNS(webServerName);
   wifi.start();
