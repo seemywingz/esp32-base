@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "output": ".arduino",
+    "sketch": "esp32-base.ino"
+}

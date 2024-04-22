@@ -9,8 +9,8 @@
         "ssid": "",
         "password": ""
     },
-    "apiKeys": {
-        "openWeatherMap": "",
-        "openAI": ""
+    "openAI": {
+        "apiKey" : "",
+        "voice": "onyx"
     }
 }

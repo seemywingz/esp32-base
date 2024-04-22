@@ -29,6 +29,7 @@
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
+                "/Users/kjj/Library/Arduino15/packages/esp32/**",
                 "/Users/kjj/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15/tools/sdk/esp32c3/include/newlib/platform_include",
                 "/Users/kjj/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15/tools/sdk/esp32c3/include/freertos/include",
                 "/Users/kjj/Library/Arduino15/packages/esp32/hardware/esp32/2.0.15/tools/sdk/esp32c3/include/freertos/include/esp_additions/freertos",
