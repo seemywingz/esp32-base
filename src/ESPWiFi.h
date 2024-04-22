@@ -105,7 +105,7 @@ class ESPWiFi {
 
  private:
   void startMDNS() {
-    String domain = config["mdns"]["domain"];
+    String domain = config["mdns"];
     if (!MDNS.begin(domain)) {
       Serial.println("Error setting up MDNS responder!");
     } else {
@@ -137,7 +137,24 @@ class ESPWiFi {
       }
     });
 
-    // List all files in the LittleFS
+    webServer.on("/config", HTTP_GET, [this]() {
+      String response;
+      serializeJson(config, response);
+      webServer.send(200, "application/json", response);
+    });
+
+    webServer.on("/config", HTTP_POST, [this]() {
+      String body = webServer.arg("plain");
+      DeserializationError error = deserializeJson(config, body);
+      if (error) {
+        webServer.send(400, "application/json", "{\"error\":\"Invalid JSON\"}");
+      } else {
+        File file = LittleFS.open(configFile, "w");
+        serializeJson(config, file);
+        file.close();
+        webServer.send(200, "application/json", "{\"success\":true}");
+      }
+    });
 
     webServer.begin();
   }
@@ -147,12 +164,15 @@ class ESPWiFi {
     if (!file) {
       Serial.println("Failed to open config file");
       defaultConfig();
+      return;
     }
 
     DeserializationError error = deserializeJson(config, file);
     if (error) {
       Serial.println("Failed to read config file: " + String(error.c_str()));
       defaultConfig();
+      file.close();
+      return;
     }
 
     if (config["client"]["ssid"] == "" || config["client"]["password"] == "") {
@@ -168,7 +188,11 @@ class ESPWiFi {
     config["mode"] = "ap";
     config["ap"]["ssid"] = "ESP32-" + String(ESP.getEfuseMac(), HEX);
     config["ap"]["password"] = "abcd1234";
-    config["mdns"]["domain"] = "esp32";
+    config["mdns"] = "esp32";
+    config["client"]["ssid"] = "";
+    config["client"]["password"] = "";
+    config["apiKeys"]["openAI"] = "";
+    config["apiKeys"]["openWeatherMap"] = "";
   }
 };
 #endif  // ESPWiFi_h

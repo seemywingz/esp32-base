@@ -1,4 +1,6 @@
 {
+    "mode": "client",
+    "mdns": "",
     "client": {
         "ssid": "",
         "password": ""
@@ -7,12 +9,8 @@
         "ssid": "",
         "password": ""
     },
-    "mdns": {
-        "domain": ""
-    },
-    "api-keys": {
+    "apiKeys": {
         "openWeatherMap": "",
-        "googleMaps": "",
         "openAI": ""
     }
 }
