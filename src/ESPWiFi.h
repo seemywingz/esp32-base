@@ -25,8 +25,6 @@ class ESPWiFi {
   }
 
   void start() {
-    // pinMode(LED_BUILTIN, OUTPUT);
-
     Serial.begin(115200);
     while (!Serial) {
       delay(10);
