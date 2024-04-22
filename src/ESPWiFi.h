@@ -33,9 +33,9 @@ class ESPWiFi {
 
   void start() {
     init();
+    readConfig();
 
-    if (!readConfig()) {
-      Serial.println("Failed to read config file, starting AP");
+    if (config["mode"] == "ap") {
       startAP();
     } else {
       connectToWifi();
@@ -64,8 +64,8 @@ class ESPWiFi {
   }
 
   void startAP() {
-    String ssid = "ESP32-" + String(ESP.getEfuseMac(), HEX);
-    String password = "abcd1234";
+    String ssid = config["ap"]["ssid"];
+    String password = config["ap"]["password"];
     WiFi.softAP(ssid, password);
     Serial.println("\n\nStarting Access Point:");
     Serial.println("\tSSID: " + ssid);
@@ -142,21 +142,33 @@ class ESPWiFi {
     webServer.begin();
   }
 
-  bool readConfig() {
-    // Open config.json file
+  void readConfig() {
     File file = LittleFS.open(configFile, "r");
     if (!file) {
       Serial.println("Failed to open config file");
-      return false;
+      defaultConfig();
     }
 
-    // Parse the JSON object
     DeserializationError error = deserializeJson(config, file);
     if (error) {
-      Serial.println("Failed to read file, using default configuration");
-      return false;
+      Serial.println("Failed to read config file: " + String(error.c_str()));
+      defaultConfig();
     }
-    return true;
+
+    if (config["client"]["ssid"] == "" || config["client"]["password"] == "") {
+      Serial.println("Invalid client config");
+      defaultConfig();
+    }
+
+    file.close();
+  }
+
+  void defaultConfig() {
+    Serial.println("Using default config");
+    config["mode"] = "ap";
+    config["ap"]["ssid"] = "ESP32-" + String(ESP.getEfuseMac(), HEX);
+    config["ap"]["password"] = "abcd1234";
+    config["mdns"]["domain"] = "esp32";
   }
 };
 #endif  // ESPWiFi_h
