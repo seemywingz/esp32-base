@@ -27,14 +27,14 @@ window.onload = function () {
     loadConfig();
 };
 
-async function saveConfig() {
+function saveConfig() {
     try {
-        const response = await fetch('/config', {
+        const response = fetch('/config', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(config), // Use the global config object directly
+            body: JSON.stringify(config),
         });
 
         if (response.ok) {

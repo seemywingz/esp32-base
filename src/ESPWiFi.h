@@ -16,6 +16,8 @@ class ESPWiFi {
 
   WebServer webServer;
 
+  int maxConnectAttempts = 90;
+
   ESPWiFi() {}
 
   void init() {
@@ -53,6 +55,13 @@ class ESPWiFi {
     Serial.println("\tSSID: " + ssid);
     Serial.println("\tPassword: " + password);
     while (WiFi.status() != WL_CONNECTED) {
+      if (--maxConnectAttempts == 0) {
+        Serial.println("Failed to connect to WiFi");
+        maxConnectAttempts = 90;
+        defaultConfig();
+        startAP();
+        return;
+      }
       digitalWrite(LED_BUILTIN, HIGH);
       delay(250);
       digitalWrite(LED_BUILTIN, LOW);
