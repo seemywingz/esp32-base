@@ -44,18 +44,32 @@
 
                 <div class="toggle-content" id="mode-settings"><!-- Mode -->
                     <div class="setting">
+                        <label>Current Mode:</label>
+                        <label id="currentMode">Client</label>
+                    </div>
+                </div>
+
+                <div class="toggle-content" id="save-settings"> <!-- Save -->
+                    <button id="saveButton" class="clickable button"
+                        style="background-color: brown;">Save</button>
+                </div>
+
+                <div class="toggle-content"
+                    id="ap-mode-settings"><!-- AP Mode -->
+                    <div class="setting">
                         <button id="apModeButton" class="clickable button"
-                            style="background-color: brown;">Start AP
-                            Mode</button>
-                        <button id="clientModeButton" class="clickable button"
-                            style="background-color: brown;">Start Client
+                            style="background-color: brown;">Restart in AP
                             Mode</button>
                     </div>
                 </div>
 
-                <div class="toggle-content" id="save-settings">
-                    <button id="saveButton" class="clickable button"
-                        style="background-color: brown;">Save</button>
+                <div class="toggle-content"
+                    id="client-mode-settings"><!-- Client Mode -->
+                    <div class="setting">
+                        <button id="clientModeButton" class="clickable button"
+                            style="background-color: brown;">Restart in Client
+                            Mode</button>
+                    </div>
                 </div>
 
                 <div class="toggle-content" id="about-settings"
