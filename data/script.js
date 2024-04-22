@@ -53,6 +53,9 @@ settingSelect.addEventListener('change', function () {
     var clientModeSettings = document.getElementById('client-mode-settings');
     clientModeSettings.style.display = 'none';
 
+    var filesSettings = document.getElementById('files-settings');
+    filesSettings.style.display = 'none';
+
     switch (setting) {
         case 'wifi':
             wifiSettings.style.display = 'block';
@@ -68,6 +71,9 @@ settingSelect.addEventListener('change', function () {
             modeSettings.style.display = 'block';
             apModeSettings.style.display = 'block';
             clientModeSettings.style.display = 'block';
+            break;
+        case 'files':
+            filesSettings.style.display = 'block';
             break;
         case 'about':
             aboutSettings.style.display = 'block';
@@ -136,3 +142,24 @@ document.getElementById('clientModeButton').addEventListener('click', function (
     saveConfig();
     restart();
 });
+
+function fetchFileList() {
+    fetch('/list-files')
+        .then(response => response.json())
+        .then(files => {
+            const fileListElement = document.getElementById('fileList');
+            fileListElement.innerHTML = '';  // Clear existing list
+            files.forEach(file => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.textContent = file;
+                a.href = file;  // Set the href to the file path
+                a.target = "_blank";  // Optional: opens the file in a new tab
+                li.appendChild(a);
+                fileListElement.appendChild(li);
+            });
+        })
+        .catch(error => console.error('Error fetching file list:', error));
+}
+
+document.getElementById('fetchFilesButton').addEventListener('click', fetchFileList);

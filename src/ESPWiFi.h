@@ -18,7 +18,7 @@ class ESPWiFi {
 
   WebServer webServer;
 
-  int maxConnectAttempts = 90;
+  int maxConnectAttempts = 120;
 
   ESPWiFi() {}
 
@@ -272,6 +272,9 @@ class ESPWiFi {
       ESP.restart();
     });
 
+    // Handler to list files
+    webServer.on("/list-files", HTTP_GET, [this]() { listFilesHandler(); });
+
     webServer.begin();
   }
 
@@ -307,6 +310,22 @@ class ESPWiFi {
     config["mdns"] = "esp32";
     config["client"]["ssid"] = "";
     config["client"]["password"] = "";
+  }
+
+  void listFilesHandler() {
+    String path = "/";
+    File root = LittleFS.open(path, "r");
+    String fileNames = "[";  // Start JSON array
+    File file = root.openNextFile();
+    while (file) {
+      if (fileNames.length() > 1) {
+        fileNames += ",";
+      }
+      fileNames += "\"" + String(file.name()) + "\"";
+      file = root.openNextFile();
+    }
+    fileNames += "]";                                    // Close JSON array
+    webServer.send(200, "application/json", fileNames);  // Send JSON response
   }
 };
 #endif  // ESPWiFi_h
