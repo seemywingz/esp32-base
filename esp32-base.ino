@@ -1,13 +1,12 @@
 
-#include <ESPWiFi.h>
+#include "ESPWiFi.h"
 
 // Web Server
-const String webServerName = "ESP32-C3";
-ESPWiFi wifi(webServerName, "abcd1234");
+ESPWiFi wifi("ESP32", "abcd1234");
 
-void setup() {
-  wifi.enableMDNS(webServerName);
-  wifi.start();
+void setup() { wifi.start(); }
+
+void loop() {
+  wifi.handleClient();
+  delay(10);
 }
-
-void loop() { wifi.handleClient(); }
