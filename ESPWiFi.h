@@ -61,9 +61,10 @@ class ESPWiFi {
       Serial.print(".");
     }
     Serial.println("");
-    Serial.println("WiFi connected");
-    Serial.print("IP address: ");
-    Serial.print(WiFi.localIP());
+    Serial.println("\tWiFi connected");
+    Serial.print("\tIP Address: ");
+    Serial.println(WiFi.localIP());
+    Serial.println("\tDomain Name: " + domain + ".local");
   }
 
   String getContentType(String filename) {
@@ -113,6 +114,7 @@ class ESPWiFi {
         file.close();
       }
     });
+
     // Generic handler for all file requests
     webServer.onNotFound([this]() {
       String path = webServer.uri();
@@ -126,6 +128,9 @@ class ESPWiFi {
         webServer.send(200, "text/html", "404: Not Found");
       }
     });
+
+    // List all files in the LittleFS
+
     webServer.begin();
   }
 
