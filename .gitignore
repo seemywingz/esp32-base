@@ -2,3 +2,4 @@
 .arduino/
 .vscode/
 data/wifi-credentials
+data/config.json

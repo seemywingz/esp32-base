@@ -1,0 +1,18 @@
+{
+    "client": {
+        "ssid": "",
+        "password": ""
+    },
+    "ap": {
+        "ssid": "",
+        "password": ""
+    },
+    "mdns": {
+        "domain": ""
+    },
+    "api-keys": {
+        "openWeatherMap": "",
+        "googleMaps": "",
+        "openAI": ""
+    }
+}

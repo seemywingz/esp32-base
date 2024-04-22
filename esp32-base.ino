@@ -2,7 +2,7 @@
 #include "src/ESPWiFi.h"
 
 // Web Server
-ESPWiFi wifi("ESP32", "abcd1234");
+ESPWiFi wifi;
 
 void setup() { wifi.start(); }
 

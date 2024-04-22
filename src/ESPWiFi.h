@@ -2,6 +2,7 @@
 #define ESPWiFi_h
 
 #include <Arduino.h>
+#include <ArduinoJson.h>
 #include <ESPmDNS.h>
 #include <LittleFS.h>
 #include <WebServer.h>
@@ -9,22 +10,15 @@
 
 class ESPWiFi {
  public:
-  String ssid;
-  String domain;
-  String password;
-  String credentialsFile = "/wifi-credentials";
+  DynamicJsonDocument config = DynamicJsonDocument(256);
+
+  String configFile = "/config.json";
 
   WebServer webServer;
 
-  bool APEnabled = false;
+  ESPWiFi() {}
 
-  ESPWiFi(String apSsid, String apPassword) {
-    this->ssid = apSsid;
-    this->domain = apSsid;
-    this->password = apPassword;
-  }
-
-  void start() {
+  void init() {
     Serial.begin(115200);
     while (!Serial) {
       delay(10);
@@ -33,13 +27,16 @@ class ESPWiFi {
     if (!LittleFS.begin()) {
       Serial.println("An Error has occurred while mounting LittleFS");
     }
+    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, LOW);
+  }
 
-    if (!readWifiCredentials()) {
-      Serial.println("Failed to read WiFi credentials: " + credentialsFile);
-      Serial.println("Starting as Access Point:");
-      Serial.println("\tSSID: " + ssid);
-      Serial.println("\tPassword: " + password);
-      APEnabled = true;
+  void start() {
+    init();
+
+    if (!readConfig()) {
+      Serial.println("Failed to read config file, starting AP");
+      startAP();
     } else {
       connectToWifi();
     }
@@ -49,12 +46,14 @@ class ESPWiFi {
   }
 
   void connectToWifi() {
+    String ssid = config["client"]["ssid"];
+    String password = config["client"]["password"];
     WiFi.begin(ssid, password);
     Serial.println("\n\nConnecting to: " + ssid);
     while (WiFi.status() != WL_CONNECTED) {
-      digitalWrite(LED_BUILTIN, LOW);
-      delay(250);
       digitalWrite(LED_BUILTIN, HIGH);
+      delay(250);
+      digitalWrite(LED_BUILTIN, LOW);
       delay(250);
       Serial.print(".");
     }
@@ -62,6 +61,17 @@ class ESPWiFi {
     Serial.println("\tWiFi connected");
     Serial.print("\tIP Address: ");
     Serial.println(WiFi.localIP());
+  }
+
+  void startAP() {
+    String ssid = "ESP32-" + String(ESP.getEfuseMac(), HEX);
+    String password = "abcd1234";
+    WiFi.softAP(ssid, password);
+    Serial.println("\n\nStarting Access Point:");
+    Serial.println("\tSSID: " + ssid);
+    Serial.println("\tPassword: " + password);
+    Serial.print("\tIP Address: ");
+    Serial.println(WiFi.softAPIP());
   }
 
   String getContentType(String filename) {
@@ -95,6 +105,7 @@ class ESPWiFi {
 
  private:
   void startMDNS() {
+    String domain = config["mdns"]["domain"];
     if (!MDNS.begin(domain)) {
       Serial.println("Error setting up MDNS responder!");
     } else {
@@ -104,7 +115,6 @@ class ESPWiFi {
   }
 
   void startWebServer() {
-    // Route for root / web page
     webServer.on("/", HTTP_GET, [this]() {
       File file = LittleFS.open("/index.html", "r");
       if (file) {
@@ -132,27 +142,21 @@ class ESPWiFi {
     webServer.begin();
   }
 
-  bool readWifiCredentials() {
-    File credFile = LittleFS.open(credentialsFile, "r");
-    if (!credFile) {
-      Serial.println("Credentials file not found");
+  bool readConfig() {
+    // Open config.json file
+    File file = LittleFS.open(configFile, "r");
+    if (!file) {
+      Serial.println("Failed to open config file");
       return false;
     }
 
-    String ssid = credFile.readStringUntil('\n');
-    String password = credFile.readStringUntil('\n');
-    credFile.close();
-
-    ssid.trim();
-    password.trim();
-
-    if (ssid.length() > 0 && password.length() > 0) {
-      this->ssid = ssid;
-      this->password = password;
-      return true;
+    // Parse the JSON object
+    DeserializationError error = deserializeJson(config, file);
+    if (error) {
+      Serial.println("Failed to read file, using default configuration");
+      return false;
     }
-
-    return false;
+    return true;
   }
 };
 #endif  // ESPWiFi_h
