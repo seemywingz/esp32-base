@@ -17,6 +17,7 @@
                         class="clickable">
                         <option value="about">About</option>
                         <option value="wifi"> WiFi</option>
+                        <option value="ap">AP</option>
                     </select>
                 </div>
 
@@ -25,7 +26,17 @@
                         <label>SSID</label>
                         <input id="wifiSSID" type="text" placeholder="SSID">
                         <label>Password</label>
-                        <input id="wifiPassword" type="password"
+                        <input id="wifiPassword" type="text"
+                            placeholder="Password">
+                    </div>
+                </div>
+
+                <div class="toggle-content" id="ap-settings"><!-- AP -->
+                    <div class="setting">
+                        <label>SSID</label>
+                        <input id="apSSID" type="text" placeholder="SSID">
+                        <label>Password</label>
+                        <input id="apPassword" type="text"
                             placeholder="Password">
                     </div>
                 </div>

@@ -6,19 +6,21 @@ async function loadConfig() {
         const response = await fetch('/config');
         if (response.ok) {
             config = await response.json();
-            updateUI(); // Update UI elements with new configuration
+            updateUI();
         } else {
             throw new Error('Failed to load configuration');
         }
     } catch (error) {
         console.error('Error loading configuration:', error);
-        alert('Error loading configuration');
+        // alert('Error loading configuration');
     }
 }
 
 function updateUI() {
     document.getElementById('wifiSSID').value = config.client.ssid || '';
     document.getElementById('wifiPassword').value = config.client.password || '';
+    document.getElementById('apSSID').value = config.ap.ssid || '';
+    document.getElementById('apPassword').value = config.ap.password || '';
 }
 
 window.onload = function () {
@@ -56,12 +58,19 @@ settingSelect.addEventListener('change', function () {
     var aboutSettings = document.getElementById('about-settings');
     aboutSettings.style.display = 'none';
 
+    var apSettings = document.getElementById('ap-settings');
+    apSettings.style.display = 'none';
+
     var saveSettings = document.getElementById('save-settings');
     saveSettings.style.display = 'none';
 
     switch (setting) {
         case 'wifi':
             wifiSettings.style.display = 'block';
+            saveSettings.style.display = 'block';
+            break;
+        case 'ap':
+            apSettings.style.display = 'block';
             saveSettings.style.display = 'block';
             break;
         case 'about':
