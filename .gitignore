@@ -1,2 +1,4 @@
 .DS_Store
 .arduino/
+.vscode/
+data/wifi-credentials
