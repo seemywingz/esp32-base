@@ -130,7 +130,10 @@ class ESPWiFi {
     doc["messages"] = JsonArray();
     doc["messages"].add(JsonObject());
     doc["messages"][0]["role"] = "system";
-    doc["messages"][0]["content"] = "You are a helpful assistant.";
+    doc["messages"][0]["content"] =
+        config["openAI"]["system_message"].as<String>()
+            ? config["openAI"]["system_message"].as<String>()
+            : "You are a helpful assistant.";
     doc["messages"].add(JsonObject());
     doc["messages"][1]["role"] = "user";
     doc["messages"][1]["content"] = text;

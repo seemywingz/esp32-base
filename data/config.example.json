@@ -11,6 +11,7 @@
     },
     "openAI": {
         "apiKey" : "",
-        "voice": "onyx"
+        "voice": "onyx",
+        "system_message": "You are a helpful assistant. On the ESP32-C3 device"
     }
 }

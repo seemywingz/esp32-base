@@ -12,7 +12,8 @@ void loop() {
   wifi.handleClient();
   if (!runOnce) {
     runOnce = true;
-    wifi.openAI_TTS("Hello, world!", "/hello.mp3");
+    String response = wifi.openAIChat("Hello, world!");
+    wifi.openAI_TTS(response, "/hello.mp3");
   }
   delay(10);
 }
