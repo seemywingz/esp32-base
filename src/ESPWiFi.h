@@ -62,7 +62,6 @@ class ESPWiFi {
     Serial.println("\tWiFi connected");
     Serial.print("\tIP Address: ");
     Serial.println(WiFi.localIP());
-    Serial.println("\tDomain Name: " + domain + ".local");
   }
 
   String getContentType(String filename) {
@@ -100,6 +99,7 @@ class ESPWiFi {
       Serial.println("Error setting up MDNS responder!");
     } else {
       MDNS.addService("http", "tcp", 80);
+      Serial.println("\tDomain Name: " + domain + ".local");
     }
   }
 
