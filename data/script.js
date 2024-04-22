@@ -64,6 +64,9 @@ settingSelect.addEventListener('change', function () {
     var saveSettings = document.getElementById('save-settings');
     saveSettings.style.display = 'none';
 
+    var modeSettings = document.getElementById('mode-settings');
+    modeSettings.style.display = 'none';
+
     switch (setting) {
         case 'wifi':
             wifiSettings.style.display = 'block';
@@ -73,16 +76,48 @@ settingSelect.addEventListener('change', function () {
             apSettings.style.display = 'block';
             saveSettings.style.display = 'block';
             break;
+        case 'mode':
+            modeSettings.style.display = 'block';
+            break;
         case 'about':
             aboutSettings.style.display = 'block';
             break;
     }
 });
 
+async function restart() {
+    try {
+        const response = await fetch('/restart', {
+            method: 'POST',
+        });
+
+        if (response.ok) {
+            alert('Restarting in ' + JSON.stringify(config.mode) + 'mode');
+        } else {
+            throw new Error('Failed to restart');
+        }
+    } catch (error) {
+        console.error('Error restart:', error);
+        alert('Error restart');
+    }
+}
+
 document.getElementById('saveButton').addEventListener('click', function () {
     config.client.ssid = document.getElementById('wifiSSID').value;
     config.client.password = document.getElementById('wifiPassword').value;
+    config.ap.ssid = document.getElementById('apSSID').value;
+    config.ap.password = document.getElementById('apPassword').value;
     saveConfig();
 });
 
+document.getElementById('apModeButton').addEventListener('click', function () {
+    config.mode = 'ap';
+    saveConfig();
+    restart();
+});
 
+document.getElementById('clientModeButton').addEventListener('click', function () {
+    config.mode = 'client';
+    saveConfig();
+    restart();
+});

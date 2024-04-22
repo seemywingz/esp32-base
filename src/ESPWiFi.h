@@ -49,7 +49,9 @@ class ESPWiFi {
     String ssid = config["client"]["ssid"];
     String password = config["client"]["password"];
     WiFi.begin(ssid, password);
-    Serial.println("\n\nConnecting to: " + ssid);
+    Serial.println("\n\nConnecting to:");
+    Serial.println("\tSSID: " + ssid);
+    Serial.println("\tPassword: " + password);
     while (WiFi.status() != WL_CONNECTED) {
       digitalWrite(LED_BUILTIN, HIGH);
       delay(250);
@@ -154,6 +156,13 @@ class ESPWiFi {
         file.close();
         webServer.send(200, "application/json", "{\"success\":true}");
       }
+    });
+
+    webServer.on("/restart", HTTP_POST, [this]() {
+      webServer.send(200, "application/json", "{\"success\":true}");
+      Serial.println("Restarting...");
+      delay(1000);
+      ESP.restart();
     });
 
     webServer.begin();
