@@ -17,11 +17,20 @@ async function loadConfig() {
 }
 
 function updateUI() {
+
+    console.log('Config loaded:', config);
+
     document.getElementById('wifiSSID').value = config.client.ssid || '';
     document.getElementById('wifiPassword').value = config.client.password || '';
+
     document.getElementById('apSSID').value = config.ap.ssid || '';
     document.getElementById('apPassword').value = config.ap.password || '';
     document.getElementById('currentMode').innerText = config.mode || '';
+
+    document.getElementById('openAIKey').value = config.openAI.apiKey || '';
+    document.getElementById('openAIVoice').value = config.openAI.voice || '';
+    document.getElementById('openAISystemMessage').value = config.openAI.system_message || '';
+
 }
 
 window.onload = function () {
@@ -56,6 +65,9 @@ settingSelect.addEventListener('change', function () {
     var filesSettings = document.getElementById('files-settings');
     filesSettings.style.display = 'none';
 
+    var openAISettings = document.getElementById('openai-settings');
+    openAISettings.style.display = 'none';
+
     switch (setting) {
         case 'wifi':
             wifiSettings.style.display = 'block';
@@ -66,6 +78,10 @@ settingSelect.addEventListener('change', function () {
             apSettings.style.display = 'block';
             saveSettings.style.display = 'block';
             apModeSettings.style.display = 'block';
+            break;
+        case 'openai':
+            openAISettings.style.display = 'block';
+            saveSettings.style.display = 'block';
             break;
         case 'mode':
             modeSettings.style.display = 'block';

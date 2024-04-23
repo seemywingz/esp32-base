@@ -18,6 +18,7 @@
                         <option value="about">About</option>
                         <option value="wifi"> WiFi</option>
                         <option value="ap">AP</option>
+                        <option value="openai">OpenAI</option>
                         <option value="mode">Mode</option>
                         <option value="files">Files</option>
                     </select>
@@ -47,6 +48,20 @@
                     <div class="setting">
                         <label>Current Mode:</label>
                         <label id="currentMode">Client</label>
+                    </div>
+                </div>
+
+                <div class="toggle-content" id="openai-settings"><!-- OpenAI -->
+                    <div class="setting">
+                        <label>API Key</label>
+                        <input id="openAIKey" type="text"
+                            placeholder="API Key">
+                        <label>Voice</label>
+                        <input id="openAIVoice" type="text"
+                            placeholder="Voice">
+                        <label>System Message</label>
+                        <input id="openAISystemMessage" type="text"
+                            placeholder="System Message">
                     </div>
                 </div>
 
